@@ -110,10 +110,12 @@ export class InputService {
                 if (!this.working) {
                     this.working = true;
                     if (this.controllerIndex < 0) {
+                        this.working = false;
                         return;
                     }
                     const gamepad = navigator.getGamepads()[this.controllerIndex];
                     if (!gamepad) {
+                        this.working = false;
                         return;
                     }
                     this.handleGamepadInput(gamepad);
