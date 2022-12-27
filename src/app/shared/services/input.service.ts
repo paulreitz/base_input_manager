@@ -91,6 +91,7 @@ export class InputService {
             }
         });
         this.controllerAxes.forEach((axis: number[], index: number) => {
+            // TODO: Enter event is correct, but exit event is not - working on a fix.
             const change = axes[index][0] - axis[0];
             if (Math.abs(change)) {
                 this._inputSource.next({
