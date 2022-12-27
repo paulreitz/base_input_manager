@@ -59,14 +59,14 @@ export class InputService {
             });
 
         // @ts-ignore
-        fromEvent(window, 'gamepadconnected').subscribe((e: GamepadEvent) => {
+        fromEvent<GamepadEvent>(window, 'gamepadconnected').subscribe((e: GamepadEvent) => {
             this.controllerIndex = e.gamepad.index;
             this.handleGamepadInput(e.gamepad);
             this.startGamepadLoop();
         });
 
         // @ts-ignore
-        fromEvent(window, 'gamepaddisconnected').subscribe((e: GamepadEvent) => {
+        fromEvent<GamepadEvent>(window, 'gamepaddisconnected').subscribe((__e: GamepadEvent) => {
             this._disconnect$.next();
         });
     }
