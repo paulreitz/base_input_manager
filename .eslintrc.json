@@ -17,6 +17,7 @@
                 "plugin:prettier/recommended"
             ],
             "rules": {
+                "no-extra-boolean-cast": "off",
                 "@angular-eslint/directive-selector": [
                     "error",
                     {

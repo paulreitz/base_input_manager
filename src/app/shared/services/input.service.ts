@@ -22,6 +22,7 @@ export class InputService {
     private fps = 12;
     private controllerIndex = -1;
     private working = false;
+    private keyDown: { [key: string]: boolean } = {};
 
     input$ = this._inputSource.asObservable();
 
@@ -30,6 +31,13 @@ export class InputService {
             .pipe(
                 filter((e: KeyboardEvent) => {
                     return Object.keys(InputMap).includes(e.key);
+                }),
+                filter((e: KeyboardEvent) => {
+                    if (!!this.keyDown[e.key]) {
+                        return false;
+                    }
+                    this.keyDown[e.key] = true;
+                    return true;
                 }),
                 map((e: KeyboardEvent) => {
                     return e.key;
@@ -52,6 +60,7 @@ export class InputService {
                 })
             )
             .subscribe((key: string) => {
+                this.keyDown[key] = false;
                 this._inputSource.next({
                     type: InputMap[key],
                     eventEntered: false,
