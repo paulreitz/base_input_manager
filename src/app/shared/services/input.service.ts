@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Subject, fromEvent, interval } from 'rxjs';
-import { takeUntil, filter, map } from 'rxjs/operators';
+import { takeUntil, filter, map, tap } from 'rxjs/operators';
 import { AxisMap, ButtonMap, InputEventType, InputMap } from '../enums/input-event-type';
 import { ControlInputEvent } from '../interfaces/input-event';
 
@@ -33,14 +33,13 @@ export class InputService {
                     return Object.keys(InputMap).includes(e.key);
                 }),
                 filter((e: KeyboardEvent) => {
-                    if (!!this.keyDown[e.key]) {
-                        return false;
-                    }
-                    this.keyDown[e.key] = true;
-                    return true;
+                    return !this.keyDown[e.key];
                 }),
                 map((e: KeyboardEvent) => {
                     return e.key;
+                }),
+                tap((key: string) => {
+                    this.keyDown[key] = true;
                 })
             )
             .subscribe((key: string) => {
@@ -57,10 +56,12 @@ export class InputService {
                 }),
                 map((e: KeyboardEvent) => {
                     return e.key;
+                }),
+                tap((key: string) => {
+                    this.keyDown[key] = false;
                 })
             )
             .subscribe((key: string) => {
-                this.keyDown[key] = false;
                 this._inputSource.next({
                     type: InputMap[key],
                     eventEntered: false,
